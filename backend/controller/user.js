@@ -1,6 +1,10 @@
 const userModel = require('../model/User')
-const createUserToken = require('../helprs/create-user-token')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+//helpers
+const createUserToken = require('../helprs/create-user-token')
+const getToken = require('../helprs/get-token')
 
 
 module.exports = class userController{
@@ -72,4 +76,63 @@ module.exports = class userController{
         
     }
 
+    static async login (req, res){
+        
+        const {email, password} = req.body
+
+        if(!email){
+            res.status(422).json({message: 'email inválido, tente novamente'})
+            return
+        }
+
+        if(!password){
+             res.status(422).json({message: 'senha encorreta, tente novament'})
+             return
+        }
+
+        const user = await userModel.findOne({email: email})
+
+        if(!user){
+            res.status(422).json({message: 'email inválido, tente novamente'})
+            return
+        }
+
+        const passwordHash =  bcrypt.compare(password, user.password)
+
+        if(!passwordHash){
+            res.status(422).json({message: 'senha inválida, tente novamente'})
+            return 
+        }
+
+        try{
+            await createUserToken(user, req, res)
+        }catch(err){console.log(err)}
+
+    }
+
+    static async checkUser (req, res){
+
+        let currentUser;
+
+        if(req.headers.authorization){
+
+            const authToken = getToken(req)
+            const decoded = jwt.verify(authToken, 'nossosecret')
+
+            currentUser = await userModel.findById({_id : decoded.id})
+
+            currentUser.password = undefined
+        }else{
+            currentUser = null
+        }
+
+        res.status(200).send(currentUser)
+
+    }
+    
+    static async editUser (req, res){
+
+        res.status(200).json({message: 'deu tudo certo'})
+
+    }
 }

@@ -1,5 +1,5 @@
 const  jwt = require('jsonwebtoken')
-
+    
 const createUserToken = async (user, req, res) => {
 
     //criar o token
@@ -10,6 +10,7 @@ const createUserToken = async (user, req, res) => {
     }, "nossosecret")
 
     //retornar o token 
+    //dado disponivel no front
     res.status(200).json({
         message: 'token criado com sucesso',
         token: token,
