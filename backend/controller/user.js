@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 //helpers
 const createUserToken = require('../helprs/create-user-token')
 const getToken = require('../helprs/get-token')
+const checkUserToken = require('../helprs/check-user-token')
 
 
 module.exports = class userController{
@@ -132,7 +133,41 @@ module.exports = class userController{
     
     static async editUser (req, res){
 
-        res.status(200).json({message: 'deu tudo certo'})
+        const token = getToken(req)
+        const user = await checkUserToken(token)
+
+        const {name, email, phone, password, confirmpassword} = req.body;
+
+        let image = '';
+
+        if(!name){
+            res.status(422).json({message: "campo Usuário é obrigatorio"})
+            return
+        }
+
+        if(!email){
+            res.status(422).json({message: "campo email é obrigatorio"})
+            return
+        }
+
+        if(!password){
+            res.status(422).json({message: "campo passoword é obrigatorio"})
+            return
+        }
+
+        if(!phone){
+            res.status(422).json({message: "campo telefone é obrigatorio"})
+            return
+        }
+
+        const UserExists = await userModel.findOne({email:email})
+
+        if(user.email !== email && UserExists){
+            res.status(422).json({message: 'por favor, utilize um email diferente'})
+            return
+        }
+
+        user.email = email
 
     }
 }

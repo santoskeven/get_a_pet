@@ -6,7 +6,7 @@ const createUserToken = async (user, req, res) => {
     const token = jwt.sign({
         //passar meta dados que podem ser ligos descriptografando o token
         name: user.name,
-        id: user._id
+        id: user._id,
     }, "nossosecret")
 
     //retornar o token 
@@ -14,7 +14,7 @@ const createUserToken = async (user, req, res) => {
     res.status(200).json({
         message: 'token criado com sucesso',
         token: token,
-        UserId: user._id
+        UserId: user._id,
     })
 
 }
