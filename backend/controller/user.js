@@ -138,25 +138,19 @@ module.exports = class userController{
 
         const {name, email, phone, password, confirmpassword} = req.body;
 
-        let image = '';
+        if(req.file){
+            user.image = req.file.filename
+        }
 
         if(!name){
             res.status(422).json({message: "campo Usuário é obrigatorio"})
             return
         }
 
+        user.name = name
+
         if(!email){
             res.status(422).json({message: "campo email é obrigatorio"})
-            return
-        }
-
-        if(!password){
-            res.status(422).json({message: "campo passoword é obrigatorio"})
-            return
-        }
-
-        if(!phone){
-            res.status(422).json({message: "campo telefone é obrigatorio"})
             return
         }
 
@@ -168,6 +162,45 @@ module.exports = class userController{
         }
 
         user.email = email
+
+        if(!password){
+            res.status(422).json({message: "campo passoword é obrigatorio"})
+            return
+        }   
+
+        if(password !== confirmpassword){
+            res.status(422).json({message: 'as senhas não são iguais, tente novamente'})
+            return
+        }else if(password === confirmpassword && password != null){
+
+            const salt = await bcrypt.genSalt(12)
+            const passwordHash = await bcrypt.hash(password, salt)
+
+            user.password = passwordHash
+
+        }
+
+        if(!phone){
+            res.status(422).json({message: "campo telefone é obrigatorio"})
+            return
+        }
+
+        user.phone = phone
+
+        try{
+
+            //passar a func que ira atualizar o user
+            await userModel.findOneAndUpdate(
+                {_id: user._id},
+                {$set: user},
+                {new: true}
+            )
+            //se passar eu torno o json com messagem de sucesso
+            res.status(200).json({message: 'Usuário atualizado com sucesso'})
+        }catch(err){
+            res.status(500).json({message: 'erro ao atualizar o usuário, tente novamente'})
+            return
+        }
 
     }
 }
