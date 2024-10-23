@@ -1,3 +1,4 @@
+const { trusted } = require('mongoose')
 const mongoose = require('../db/conn')
 const { Schema } = mongoose
 
@@ -6,6 +7,7 @@ const Pet = mongoose.model(
      new Schema({
         name : {type: String, required: true},
         age : {type: Number, required: true},
+        weight: {type: String, required: true},
         color : {type: String, required: true},
         images : {type: Array, required: true},
         available : {type: Boolean},

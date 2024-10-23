@@ -15,7 +15,9 @@ app.use(express.static('public'))
 
 //routes
 const userRoutes = require('./routes/user')
+const petRoutes = require('./routes/pets')
 app.use('/user', userRoutes)
+app.use('/pets', petRoutes)
 
 app.listen(5000, ()=>{
     console.log('sevidor rodando na porta 5000')
