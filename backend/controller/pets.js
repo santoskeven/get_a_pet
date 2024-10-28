@@ -1,5 +1,7 @@
 const petsModel = require('../model/Pets')
 
+const ObjectId = require('mongoose').Types.ObjectId
+
 //helpers
 const getToken = require('../helprs/get-token')
 const getUserToken = require('../helprs/check-user-token')
@@ -30,8 +32,12 @@ module.exports = class petController{
             return res.status(422).json({message: 'o campo cor é obrigatório'})
         }
 
-        if(images.length === 0){
-            return res.status(422).json({message: 'o campo imagem é obrigatório'})
+        try{
+            if(images.length === 0){
+                return res.status(422).json({message: 'o campo imagem é obrigatório'})
+            }
+        }catch{
+            return res.status(422).json({message: 'envie o campo imagem pelo form'})
         }
 
         //get user infos
@@ -88,13 +94,49 @@ module.exports = class petController{
         const token = getToken(req)
         const user = await getUserToken(token)
 
-        console.log(user._id)
-
         const pets = await petsModel.find({'user._id': user._id}).sort('-createdAt')
 
         res.status(200).json({
             pets
         })
 
+    }
+
+    static async myAdoptions (req, res){    
+
+        const token = getToken(req)
+        const user = await getUserToken(token)
+
+        const pets = await petsModel.find({"adopter._id": user._id})
+
+        res.status(200).json({
+            pets
+        })
+
+    }
+
+    static async petId (req, res){
+        
+        const id = req.params.id
+
+        if(!ObjectId.isValid(id)){
+            res.status(422).json({
+                message: 'iD inválido'
+            })
+            return
+        }
+         
+        const pet = await petsModel.findById(id)
+
+        if(!pet){
+           return res.status(404).json({
+                message: 'pet não encontrado'
+            })
+        }
+
+        res.status(200).json({
+            pet
+        })
+        
     }
 }

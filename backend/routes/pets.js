@@ -7,6 +7,9 @@ const {imageUpload} = require('../helprs/image-upload')
 
 router.post('/create', checktoken, imageUpload.array('images'), petController.create)
 router.get('/mypets', checktoken, petController.getUserPets)
+router.get('/myadoptions', petController.myAdoptions)
+router.get('/:id', petController.petId)
+// router.delete('/:id', petController.petDelete)
 router.get('/', petController.getAllPets)
 
 
