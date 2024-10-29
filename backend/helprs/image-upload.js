@@ -21,7 +21,6 @@ const imageStore = multer.diskStorage({
 const imageUpload = multer({
     storage: imageStore, 
     fileFilter(req, file, cb){
-        console.log(file.originalname)
         if(!file.originalname.match(/\.(png|jpg)$/)){
             return cb(new Error('Por favor, adiocione uma imagem em formato png ou jpg'))
         }

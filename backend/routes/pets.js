@@ -9,7 +9,8 @@ router.post('/create', checktoken, imageUpload.array('images'), petController.cr
 router.get('/mypets', checktoken, petController.getUserPets)
 router.get('/myadoptions', petController.myAdoptions)
 router.get('/:id', petController.petId)
-// router.delete('/:id', petController.petDelete)
+router.delete('/:id', checktoken, petController.petDelete)
+router.patch('/:id', checktoken, imageUpload.array('images'), petController.petUpdate)
 router.get('/', petController.getAllPets)
 
 

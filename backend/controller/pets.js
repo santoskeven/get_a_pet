@@ -96,6 +96,13 @@ module.exports = class petController{
 
         const pets = await petsModel.find({'user._id': user._id}).sort('-createdAt')
 
+        if(pets.length == 0){
+            res.status(404).json({
+                message: 'você ainda não tem nenhum pet cadastrado'
+            })
+            return
+        }
+
         res.status(200).json({
             pets
         })
@@ -108,6 +115,8 @@ module.exports = class petController{
         const user = await getUserToken(token)
 
         const pets = await petsModel.find({"adopter._id": user._id})
+
+
 
         res.status(200).json({
             pets
@@ -139,4 +148,143 @@ module.exports = class petController{
         })
         
     }
+
+    static async petDelete(req, res){
+
+        const id = req.params.id
+
+        if(!ObjectId.isValid(id)){
+            res.status(422).json({
+                message: 'iD inválido'
+            })
+            return
+        }
+
+        const token =  getToken(req)
+        const user = await getUserToken(token)
+
+        const pet = await petsModel.findOne({_id : id})
+
+        if(!pet){
+            res.status(404).json({
+                message: 'pet não encontrado'
+            })
+            return
+        }
+
+        if(pet.user._id.toString() !== user._id.toString()){
+           res.status(422).json({
+            message: 'ocorreu um erro ao executar a ação'
+           })
+           return
+        }
+
+        await petsModel.findByIdAndDelete(id)
+
+        return res.status(200).json({
+            message: 'pet removido com sucesso'
+        })
+
+    }
+
+    static async petUpdate(req, res){
+
+        const { name, age, weight, color, available } = req.body
+        let images = req.files
+        let petData = {}
+
+        const id = req.params.id
+
+        if(!ObjectId.isValid(id)){
+            res.status(422).json({
+                message: 'ID inválido'
+            })
+            return
+        }
+
+        const pet = await petsModel.findOne({_id : id})
+
+        if(!pet){
+            res.status(404).json({
+                message: 'nenhum pet encontrado'
+            })
+            return
+        }
+
+        const token = getToken(req)
+        const user = await getUserToken(token)
+
+        if(pet.user._id.toString() !== user._id.toString()){
+            res.status(422).json({
+                message: 'ocorreu um erro na sua solicitação, revise os dados e tente novamente'
+            })
+            return
+        }
+
+        if(!name){
+            res.status(422).json({
+                message: 'o campo nome é obrigátorio'
+            })
+            return
+        }else{
+             petData.name = name
+        }
+
+        if(!age){
+            res.status(422).json({
+                message: 'o campo idade é obrigátorio'
+            })
+            return
+        }else{
+            petData.age = age
+        }
+
+        if(!weight){
+            res.status(422).json({
+                message: 'o campo peso é obrigátorio'
+            })
+            return
+        }else{
+            petData.weight = weight
+        }
+
+        if(!color){
+            res.status(422).json({
+                message: 'o  campo cor é obrigátorio'
+            })
+            return
+        }else{
+            petData.color = color
+        }
+
+        if(!available){
+            res.status(422).json({
+                message: 'o campo available é obrigátorio'
+            })
+            return
+        }else{
+            petData.available = available
+        }
+
+        if(images.length === 0){
+            res.status(422).json({
+                message: 'o campo imagem é  obrigátorio'
+            })
+            return
+        }else{
+            petData.images = []
+            images.map((image) => {
+                petData.images.push(image.filename)
+            })
+        }
+
+        await petsModel.findByIdAndUpdate(id, petData)
+
+        return res.status(200).json({
+            message: 'pet atualiado com sucesso',
+        })
+
+    }
+
+
 }
