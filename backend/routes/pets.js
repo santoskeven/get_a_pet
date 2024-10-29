@@ -11,6 +11,7 @@ router.get('/myadoptions', petController.myAdoptions)
 router.get('/:id', petController.petId)
 router.delete('/:id', checktoken, petController.petDelete)
 router.patch('/:id', checktoken, imageUpload.array('images'), petController.petUpdate)
+router.patch('/schedule/:id', checktoken, petController.schedulePet)
 router.get('/', petController.getAllPets)
 
 

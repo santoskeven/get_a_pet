@@ -286,5 +286,60 @@ module.exports = class petController{
 
     }
 
+    static async schedulePet (req, res){
+
+        const id = req.params.id
+
+
+        if(!ObjectId.isValid(id)){
+            res.status(422).json({
+                message: 'ID inválido'
+            })
+            return 
+        }
+
+        const pet = await petsModel.findOne({_id : id})
+
+        if(!pet){
+            res.status(404).json({
+                message: 'nenhum pet encontrado, revise os dados e tente novamnete'
+            })
+            return 
+        }
+
+        const token = getToken(req)
+        const user = await getUserToken(token)
+
+        if(pet.user._id.equals(user._id)){
+            res.status(422).json({
+                message: 'Você não pode agendar uma visita para o seu próprio pet'
+            })
+            return
+        }
+
+        if(pet.adopter){
+            if(pet.adopter._id.equals(user._id)){
+                res.status(422).json({
+                    message: 'Você já agendou uma visita para este pet'
+                })
+                return
+            }
+        }
+
+        pet.adopter = {
+            _id: user._id,
+            name: user.name,
+            phone: user.phone
+        }
+
+        await petsModel.findByIdAndUpdate(id, pet)
+
+        return res.status(200).json({
+            message: `visita agendada com sucesso, entre em contato com ${user.name}, pelo número ${user.phone}, para mais informações`
+        })
+
+
+    }
+
 
 }
