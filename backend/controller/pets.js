@@ -310,6 +310,12 @@ module.exports = class petController{
         const token = getToken(req)
         const user = await getUserToken(token)
 
+        if(pet.available === false){
+            return res.status(422).json({
+                message: 'esse pet não está diponível para adoção'
+            })
+        }
+
         if(pet.user._id.equals(user._id)){
             res.status(422).json({
                 message: 'Você não pode agendar uma visita para o seu próprio pet'
@@ -341,5 +347,44 @@ module.exports = class petController{
 
     }
 
+    static async concludePet (req, res){
+
+        const id = req.params.id
+
+        if(!ObjectId.isValid(id)){
+            res.status(422).json({
+                message: 'ID inválido'
+            })
+            return
+        }
+
+        const pet = await petsModel.findOne({_id : id})
+
+        if(!pet){
+            res.status(404).json({
+                message: 'pet não encontrado'
+            })
+            return 
+        }
+
+        const token = getToken(req)
+        const user = await getUserToken(token)
+
+        if(!pet.user._id.equals(user._id)){
+            res.status(422).json({
+                message: 'ocorreu um erro ao solicitar sua requisição, revise os dados e tente novamente'
+            })
+            return
+        }
+
+        pet.available = false
+
+        await petsModel.findByIdAndUpdate(id, pet)
+
+        return res.status(200).json({
+             message: 'Todas as etapas de adoção foram concluídas com sucesso!'
+        })
+        
+    }
 
 }

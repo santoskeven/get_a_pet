@@ -12,6 +12,7 @@ router.get('/:id', petController.petId)
 router.delete('/:id', checktoken, petController.petDelete)
 router.patch('/:id', checktoken, imageUpload.array('images'), petController.petUpdate)
 router.patch('/schedule/:id', checktoken, petController.schedulePet)
+router.patch('/conclude/:id', checktoken, petController.concludePet)
 router.get('/', petController.getAllPets)
 
 
