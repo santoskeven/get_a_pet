@@ -63,13 +63,8 @@ module.exports = class userController{
 
         try{
             const newUser = await user.save()
-            
-            // res.status(200).json({
-            //     message: 'tudo ok',
-            //     newUser
-            // })
 
-            await createUserToken(newUser, req, res)
+            return await createUserToken(newUser, req, res)
         }catch(err){
             res.status(500).json({message: err})
             return
