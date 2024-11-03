@@ -12,15 +12,15 @@ function App() {
     <Router>
       <Routes>
 
-        <Route exact path='/login' 
+        <Route path='/login' 
           element={<Login/>} 
         />
 
-        <Route exact path="/register" 
+        <Route path="/register" 
           element={<Register/>}
         />
 
-        <Route exact path="/" 
+        <Route path="/" 
           element={<Home/>} 
         />
 
