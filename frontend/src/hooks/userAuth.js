@@ -19,7 +19,7 @@ export default function useAuth(){
              setAuthenticated(true)
         }
 
-    })
+    }, [])
 
     async function Register(user){
 
@@ -43,6 +43,18 @@ export default function useAuth(){
 
     }
 
+    function Logout() {
+        const msgText = 'Logout realizado com sucesso'
+        const msgType = 'sucesso'
+        setAuthenticated(false)
+        localStorage.removeItem('token')
+        api.defaults.authorization = undefined
+        navigate('/')
+
+        setFlashMessage(msgText, msgType)
+
+    }
+
     async function authUser(data) {
         setAuthenticated(true)
         localStorage.setItem('token', JSON.stringify(data.token))
@@ -50,6 +62,6 @@ export default function useAuth(){
         navigate('/')
     }
 
-    return {authenticated, Register}
+    return {authenticated, Register, Logout}
 
 }

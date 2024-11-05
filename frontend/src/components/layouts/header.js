@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom"
+import { useContext } from "react"
 
 //styles
 import styles from "./header.module.css"
 
 import Logo from '../../assets/img/logo.webp'
 
+//componentes
+import { Context } from "../../context/Context"
+
 function Header (){
+
+    const {authenticated, Logout} = useContext(Context)
 
     return(
         <nav className={styles.nav_bar}>
@@ -19,12 +25,28 @@ function Header (){
                <li>
                     <Link to="/">Home</Link>
                </li>
-               <li>
-                    <Link to="/Login">Login</Link>
-               </li>
-               <li>
-                    <Link to="/Register">Register</Link>
-               </li>
+               {authenticated ? (
+                 <>
+                    <li>
+                        <Link to="/">ADOTAR</Link>
+                    </li>
+
+                    <li onClick={Logout}>SAIR</li>
+                </>
+                ) : (
+                <>
+                    <li>
+                        <Link to="/login">Login</Link>
+                    </li>
+
+                    <li>
+                        <Link to="/register">Registrar</Link>
+                    </li>
+                </>
+                )}
+                            
+              
+              
             </ul>
 
         </nav>
