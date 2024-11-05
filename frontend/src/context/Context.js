@@ -6,10 +6,10 @@ const Context = createContext()
 
 function UserProvider({children}){
 
-    const { Register } = useAuth()
+    const {authenticated, Register } = useAuth()
 
-    return <Context.Provider value={{ Register }}>{children}</Context.Provider>
+    return <Context.Provider value={{authenticated, Register }}>{children}</Context.Provider>
 
 }
 
-export {Context, UserProvider}
+export {Context, UserProvider} 
