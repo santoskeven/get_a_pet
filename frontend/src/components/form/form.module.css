@@ -5,6 +5,10 @@
     border-radius: 12px;
 }
 
+.form_container h1{
+    text-align: center;
+}
+
 .form_container input[type='submit']{
     border: none;
     border-radius: 8px;

@@ -41,8 +41,35 @@ export default function useAuth(){
 
         setFlashMessage(msgText, msgType)
 
+    }   
+
+    //FUNÇÃO PARA FAZER LOGIN DO USER (ENTRAR COM EMAIL E SENHA)
+    async function Login(user) {
+        let msgText = 'Login realizado com sucesso'
+        let msgType = 'sucess'
+
+        try{
+
+            const data = await api.post('/user/login', user).then((response) => {
+            return response.data
+            
+            }) 
+
+            await authUser(data)
+
+            setFlashMessage(msgText, msgType)
+
+        }catch(error){
+            msgText = error.response.data.message
+            msgType = 'error'
+
+            setFlashMessage(msgText, msgType)
+        }
+
     }
 
+
+    //FUNÇÃO PARA FAZER O LOGOUT DO USER (SAIR DA CONTA)
     function Logout() {
         const msgText = 'Logout realizado com sucesso'
         const msgType = 'sucesso'
@@ -62,6 +89,6 @@ export default function useAuth(){
         navigate('/')
     }
 
-    return {authenticated, Register, Logout}
+    return {authenticated, Register, Logout, Login}
 
 }
