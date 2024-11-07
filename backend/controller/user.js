@@ -164,10 +164,9 @@ module.exports = class userController{
         }   
 
         if(password !== confirmpassword){
-            res.status(422).json({message: 'as senhas não são iguais, tente novamente'})
+            res.status(422).json({message: 'as senhas não são iguais, tente novamente 2'})
             return
         }else if(password === confirmpassword && password != null){
-
             const salt = await bcrypt.genSalt(12)
             const passwordHash = await bcrypt.hash(password, salt)
 
