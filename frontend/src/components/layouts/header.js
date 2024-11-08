@@ -29,6 +29,10 @@ function Header (){
                     </li>
 
                     <li>
+                        <Link to="/user/mypets">DashBoard</Link>
+                    </li>
+
+                    <li>
                         <Link to="/user/profile">PERFIL</Link>
                     </li>
 
