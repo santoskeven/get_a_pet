@@ -4,6 +4,7 @@ import api from '../../../utils/api'
 
 import style from './addPet.module.css'
 
+import PetForm from '../../form/Petform'
 import useFlashMessage from '../../../hooks/userFlashMessages'
 
 
@@ -15,7 +16,7 @@ function AddPets(){
                 <p>Depois ele ficará disponível para adoção</p>
             </div>
 
-            < p>formulário</p>
+            <PetForm btnText='CADASTRAR'/>
         </section>
     )
 }
