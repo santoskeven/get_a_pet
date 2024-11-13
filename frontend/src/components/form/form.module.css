@@ -26,3 +26,16 @@
 .form_container input[type='submit']:hover{
     background-color: #1c8a42;
 }
+
+.preview_pets_images{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2em;
+}
+
+.preview_pets_images img{
+    width: 150px;
+    height: 150px;
+    margin-left: 1em;
+    border-radius: 100%;
+}

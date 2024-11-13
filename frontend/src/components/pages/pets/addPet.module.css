@@ -6,3 +6,7 @@
 .header h1{
     margin-bottom: .2em;
 }
+
+.header p{
+    margin-bottom: 1em;
+}

@@ -54,7 +54,7 @@ module.exports = class petController{
             user: {
                 _id: user._id,
                 name: user.name,
-                image: user.image,
+                image: user.images,
                 phone: user.phone
             }
         })
