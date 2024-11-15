@@ -17,6 +17,7 @@ import AddPets from './components/pages/pets/addPets'
 
 //context
 import { UserProvider } from './context/Context'
+import EditPets from './components/pages/pets/editPets'
 
 
 function App() {
@@ -49,6 +50,10 @@ function App() {
                <Route path="/pet/add" 
                 element={<AddPets/>}
               />
+
+              <Route path="/pet/edit/:id" 
+                element={<EditPets/>}
+              />  
 
               <Route path="/" 
                 element={<Home/>} 

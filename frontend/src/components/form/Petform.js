@@ -17,7 +17,7 @@ function PetForm({handleSubmit, petData, btnText}){
 
     function onFileChange(e){
         setPreview(Array.from(e.target.files))
-        setPet({...pet, images: [...e.target.files]})
+        setPet({ ...pet, images: [...e.target.files]})
     }
 
     function handleColor(e){
@@ -43,7 +43,7 @@ function PetForm({handleSubmit, petData, btnText}){
                     )) 
                     : pet.images && pet.images.map((image, index) => (
                         <img 
-                            src={`${process.env.REACT.APP.API}/images/pets/${image}`} 
+                            src={`${process.env.REACT_APP_API}/image/pets/${image}`} 
                             alt={pet.name} 
                             key={`${pet.name} + ${index}`} 
                         />
@@ -51,7 +51,8 @@ function PetForm({handleSubmit, petData, btnText}){
                 }
             </div>
 
-            <Input 
+            <Input
+                key="images"
                 text='Imagem'
                 type='file'
                 name='images'
@@ -60,6 +61,7 @@ function PetForm({handleSubmit, petData, btnText}){
                 multiple={true}
 
             />
+
             <Input 
                 text='Nome'
                 type='text'

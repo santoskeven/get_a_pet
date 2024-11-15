@@ -4,7 +4,8 @@ function Input ({
     type, 
     text, 
     placeholder, 
-    value, name, 
+    value, 
+    name, 
     handleOnChange, 
     multiple 
 }){

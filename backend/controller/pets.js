@@ -96,11 +96,10 @@ module.exports = class petController{
 
         const pets = await petsModel.find({'user._id': user._id}).sort('-createdAt')
 
-        if(pets.length == 0){
-            res.status(404).json({
+        if(pets.length === 0){
+            return res.status(404).json({
                 message: 'você ainda não tem nenhum pet cadastrado'
             })
-            return
         }
 
         res.status(200).json({
@@ -302,6 +301,7 @@ module.exports = class petController{
 
         if(!pet){
             res.status(404).json({
+                pet: [],
                 message: 'nenhum pet encontrado, revise os dados e tente novamnete'
             })
             return 

@@ -11,9 +11,11 @@ import RoundedImage from '../../layouts/roundedImage'
 
 function Mypets(){
 
+    const [msgFail, setMsgFail] = useState()
     const [pets, setPet] = useState([])
     const [token] = useState(localStorage.getItem('token') || '') 
     const {setFlashMessage} = useFlashMessage()
+
 
     useEffect(() => {
         api.get('/pets/mypets', {
@@ -22,15 +24,42 @@ function Mypets(){
             },
         })
         .then((res) => {
-            setPet(res.data.pets)
+            const filterPet = res.data.pets || []
+            setPet(filterPet)
+        })
+        .catch((err) => {
+            return setMsgFail(err.response.data.message)
         })
     }, [token])
+
+     async function removePets(id){
+
+        let msgType = 'sucess'
+
+        const data = await api.delete(`/pets/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`
+            }
+        })
+        .then((res) => {
+            const updatedPets = pets.filter((pet) => pet._id !== id)
+            setPet(updatedPets)
+            return res.data
+        })
+        .catch((err) => {
+            msgType = 'error'
+            return err.response.data
+        })
+
+        setFlashMessage(data.message, msgType)
+
+     }
 
     return(
         <section>
             <div className={styles.petList_header}>
                 <h1>MyPets</h1>
-                <Link to='/pets/add'>CADASTRAR PET</Link>
+                <Link to='/pet/add'>CADASTRAR PET</Link>
             </div>
 
             <div className={styles.petList_container}>  
@@ -50,7 +79,9 @@ function Mypets(){
                             (<>
                                 {pet.adopter && <button className={styles.conclude_btn}> Concluir adoção</button>}
                                 <Link to={`/pet/edit/${pet._id}`}>EDITAR</Link>
-                                <button>EXCLUIR</button>
+                                <button onClick={() => {
+                                    removePets(pet._id)
+                                }}>EXCLUIR</button>
                             </>)
                             ): 
                             (
@@ -62,13 +93,14 @@ function Mypets(){
                     ))
                 }
 
-                {pets.length == 0 && 
-                <p>Não há pet cadastrado </p>
+                {pets.length === 0 && 
+                <p>{msgFail}</p>
                 }
 
             </div>
         </section>
     )
+
 }
 
 export default Mypets

@@ -46,7 +46,7 @@ function AddPets(){
         setFlashMessage(data.message, msgType)
 
         if(msgType !== 'error'){
-            navigate('/pets/mypets')
+            navigate('/user/mypets')
         } 
     }
 
