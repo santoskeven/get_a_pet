@@ -12,7 +12,7 @@ function PetForm({handleSubmit, petData, btnText}){
     const colors = ['Branco', 'Preto', 'Cinza', 'Caramelo']
  
     function handleChange(e){
-       setPet({...pet, [e.target.name]: e.target.value})
+       setPet({ ...pet, [e.target.name]: e.target.value})
     }
 
     function onFileChange(e){
@@ -21,7 +21,7 @@ function PetForm({handleSubmit, petData, btnText}){
     }
 
     function handleColor(e){
-        setPet({...pet, color: e.target.options[e.target.selectedIndex].text})
+        setPet({ ...pet, color: e.target.options[e.target.selectedIndex].text})
     }
 
     function Submit(e){

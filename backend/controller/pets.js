@@ -188,7 +188,7 @@ module.exports = class petController{
 
     static async petUpdate(req, res){
 
-        const { name, age, weight, color, available } = req.body
+        const {name, age, weight, color, available } = req.body
         let images = req.files
         let petData = {}
 
@@ -265,12 +265,7 @@ module.exports = class petController{
             petData.available = available
         }
 
-        if(images.length === 0){
-            res.status(422).json({
-                message: 'o campo imagem é  obrigátorio'
-            })
-            return
-        }else{
+        if(images.length > 0){
             petData.images = []
             images.map((image) => {
                 petData.images.push(image.filename)
